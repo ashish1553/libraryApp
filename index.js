@@ -25,16 +25,6 @@ Display.prototype.add = function (book) {
     }
     libObj.push(book);
     localStorage.setItem('Item', JSON.stringify(libObj));
-    libObj.forEach(function (book, index) {
-        let tableBody = document.getElementById('tableBody');
-        let uiString = `<tr>
-        <td>${index + 1}</td>
-        <td>${book.name}</td>
-        <td>${book.author}</td>
-        <td>${book.type}</td>
-        </tr>`;
-        tableBody.innerHTML += uiString;
-    });
     showTable();
 
 }
@@ -48,18 +38,35 @@ function showTable() {
     else {
         libObj = JSON.parse(Item);
     }
+    let tableBody = document.getElementById('tableBody');
+    tableBody.innerHTML='';
     libObj.forEach(function (element, index) {
-        let tableBody = document.getElementById('tableBody');
         let uiString = `<tr>
-                            <td> ${index + 1}</td>
+                            <td>${index + 1}</td>
                             <td>${element.name}</td>
                             <td>${element.author}</td>
                             <td>${element.type}</td>
+                            <td><button id="${index}" onclick="deleteBtn(this.id)" class="btn btn-outline-danger">Delete</button></td>
                         </tr>`;
         tableBody.innerHTML += uiString;
         // console.log(element);
 
     });
+}
+
+//Delete functionality
+function deleteBtn(index) {
+    let Item = localStorage.getItem('Item')
+    if (Item == null) {
+        libObj = [];
+    }
+    else {
+        libObj = JSON.parse(Item);
+    }
+    libObj.splice(index,1)
+    localStorage.setItem('Item', JSON.stringify(libObj));
+    showTable();
+    
 }
 
 //Implement the clear functionality
@@ -130,6 +137,7 @@ function libraryFormSubmit(e) {
 
     e.preventDefault();
 }
+
 
 
 
