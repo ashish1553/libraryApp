@@ -1,5 +1,5 @@
 console.log('JS Connected');
-
+showTable();
 // constructor
 function Book(name, author, type) {
     this.name = name;
@@ -15,15 +15,51 @@ function Display() {
 
 //Add Methods to display prototype
 Display.prototype.add = function (book) {
-    console.log('Adding to UI');
-    let tableBody = document.getElementById('tableBody');
-    let uiString = `<tr>
-                        <td>${book.name}</td>
-                        <td>${book.author}</td>
-                        <td>${book.type}</td>
-                    </tr>`;
-    tableBody.innerHTML += uiString;
+    console.log('Adding to LS');
+    let Item = localStorage.getItem('Item')
+    if (Item == null) {
+        libObj = [];
+    }
+    else {
+        libObj = JSON.parse(Item);
+    }
+    libObj.push(book);
+    localStorage.setItem('Item', JSON.stringify(libObj));
+    libObj.forEach(function (book, index) {
+        let tableBody = document.getElementById('tableBody');
+        let uiString = `<tr>
+        <td>${index + 1}</td>
+        <td>${book.name}</td>
+        <td>${book.author}</td>
+        <td>${book.type}</td>
+        </tr>`;
+        tableBody.innerHTML += uiString;
+    });
+    showTable();
 
+}
+
+//Function to show Table
+function showTable() {
+    let Item = localStorage.getItem('Item')
+    if (Item == null) {
+        libObj = [];
+    }
+    else {
+        libObj = JSON.parse(Item);
+    }
+    libObj.forEach(function (element, index) {
+        let tableBody = document.getElementById('tableBody');
+        let uiString = `<tr>
+                            <td> ${index + 1}</td>
+                            <td>${element.name}</td>
+                            <td>${element.author}</td>
+                            <td>${element.type}</td>
+                        </tr>`;
+        tableBody.innerHTML += uiString;
+        // console.log(element);
+
+    });
 }
 
 //Implement the clear functionality
@@ -53,7 +89,7 @@ Display.prototype.show = function (type, displayMessage) {
                         </div>`;
     setTimeout(function () {
         message.innerHTML = ``;
-    }, 3000);
+    }, 2000);
 
 }
 
@@ -94,3 +130,9 @@ function libraryFormSubmit(e) {
 
     e.preventDefault();
 }
+
+
+
+
+
+
